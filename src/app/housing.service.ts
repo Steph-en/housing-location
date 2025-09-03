@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { Injectable, ProviderToken } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { HousingLocation } from "./housing-location";
 
 @Injectable({
@@ -108,23 +109,24 @@ export class HousingService {
   //   },
   // ];
 
-  url = "http://localhost:3000/locations";
+  // url = "http://localhost:3000/locations";
+  
+  url = "https://my-json-server.typicode.com/Steph-en/housing-location.git";
 
-  constructor() {}
+  constructor(private httpClient: HttpClient) {}
 
   async getAllHousingLocations(): Promise<HousingLocation[]> {
     // return this.housingLocationList;
-    const data = await fetch(this.url);
-    return await data.json() ?? [];
+    const result = await this.httpClient.get<HousingLocation[]>(this.url).toPromise();
+    return result ?? [];
   }
 
   async getHousingLocationById(id: Number): Promise<HousingLocation | undefined> {
     // return this.housingLocationList.find(housingLocation => housingLocation.id === id)
-    const data = await fetch(`${this.url}/${id}`);
-    return await data.json() ?? {};
+    return this.httpClient.get<HousingLocation>(`${this.url}/${id}`).toPromise();
   }
 
   submitApplication(firstName: string, lastName: string, email: string) {
     console.log("Application submitted!", firstName, lastName, email);
-  }
+  } 
 }
