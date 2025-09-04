@@ -8,24 +8,24 @@ import { RouterModule } from "@angular/router";
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <section class="listing">
+    <article class="listing" *ngIf="housingLocation as hl">
       <img
-        [src]="housingLocation.photo"
-        alt="Exterior photo of {{ housingLocation.name }}"
-        class="listing-photo"
+        [src]="hl.photo"
+        alt="Exterior photo of {{ hl.name }}"
+        class="listing-photo" 
+        loading="lazy"
       />
       <h2 class="listing-heading">
-        {{ housingLocation.name }}
+        {{ hl.name }}
       </h2>
       <p class="listing-location">
-        {{ housingLocation.city }}, {{ housingLocation.state }}
+        {{ hl.city }}, {{ hl.state }}
       </p>
-      <a [routerLink]="['details', housingLocation.id]">Learn more</a>
-    </section>
+      <a [routerLink]="['details', hl.id]">Learn more</a>
+    </article>
   `,
   styleUrls: ["./housing-location.component.css"],
 })
 export class HousingLocationComponent {
-  @Input()
-  housingLocation!: HousingLocation;
+  @Input() housingLocation: HousingLocation | null = null;
 }
