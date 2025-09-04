@@ -113,19 +113,30 @@ export class HousingService {
 
   // url = "http://localhost:3000/locations";
 
-  url = "https://my-json-server.typicode.com/Steph-en/housing-location/locations";
+  private resource = 'locations';
+  private baseUrl = environment.apiBaseUrl;
 
   constructor(private httpClient: HttpClient) { }
 
   async getAllHousingLocations(): Promise<HousingLocation[]> {
     // return this.housingLocationList;
-    const result = await firstValueFrom(this.httpClient.get<HousingLocation[]>(this.url));
-    return result ?? [];
+    try {
+      const result = await firstValueFrom(this.httpClient.get<HousingLocation[]>(`${this.baseUrl}/${this.resource}`));
+      return result ?? [];
+    } catch (error) {
+      console.error("Error fetching housing locations:", error);
+      return [];
+    }
   }
 
-  async getHousingLocationById(id: Number): Promise<HousingLocation | undefined> {
+  async getHousingLocationById(id: number): Promise<HousingLocation | undefined> {
     // return this.housingLocationList.find(housingLocation => housingLocation.id === id)
-    return firstValueFrom(this.httpClient.get<HousingLocation>(`${this.url}/${id}`));
+    try {
+      return await firstValueFrom(this.httpClient.get<HousingLocation>(`${this.baseUrl}/${this.resource}/${id}`));
+    } catch (error) {
+      console.error("Error fetching housing location by ID:", error);
+      return undefined;
+    }
   }
 
   submitApplication(firstName: string, lastName: string, email: string) {
