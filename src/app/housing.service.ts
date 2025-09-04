@@ -110,10 +110,10 @@ export class HousingService {
   // ];
 
   // url = "http://localhost:3000/locations";
-  
-  url = "https://my-json-server.typicode.com/Steph-en/housing-location";
 
-  constructor(private httpClient: HttpClient) {}
+  url = "https://my-json-server.typicode.com/Steph-en/housing-location/locations";
+
+  constructor(private httpClient: HttpClient) { }
 
   async getAllHousingLocations(): Promise<HousingLocation[]> {
     // return this.housingLocationList;
