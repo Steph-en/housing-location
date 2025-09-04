@@ -128,5 +128,5 @@ export class HousingService {
 
   submitApplication(firstName: string, lastName: string, email: string) {
     console.log("Application submitted!", firstName, lastName, email);
-  } 
+  }
 }
