@@ -1,21 +1,26 @@
 import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { HousingLocationComponent } from "../housing-location/housing-location.component";
-import { HousingLocation } from '../housing-location';
-import { HousingService } from '../housing.service';
+import { HousingLocation } from "../housing-location";
+import { HousingService } from "../housing.service";
+import { Observable, map, startWith } from "rxjs";
+
 @Component({
   selector: "app-home",
   standalone: true,
   template: `
     <section>
-      <form action="">
-        <input type="text" placeholder="Filter by City" #filter/>
-        <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
+      <form (submit)="$event.preventDefault()">
+        <input type="text" placeholder="Filter by City" #filter />
+        <button class="primary" type="button" (click)="applyFilter(filter.value)">
+          Search
+        </button>
       </form>
     </section>
+
     <section class="results">
       <app-housing-location
-        *ngFor="let housingLocation of filteredLocationList"
+        *ngFor="let housingLocation of filteredLocations$ | async"
         [housingLocation]="housingLocation"
       ></app-housing-location>
     </section>
@@ -24,25 +29,24 @@ import { HousingService } from '../housing.service';
   imports: [CommonModule, HousingLocationComponent],
 })
 export class HomeComponent {
-  housingLocationList: HousingLocation[] = []
+  private housingService = inject(HousingService);
 
-  housingService: HousingService = inject(HousingService);
+  // observable for the full list
+  housingLocations$ = this.housingService.getAllHousingLocations();
 
-  filteredLocationList: HousingLocation[] = [];
+  // observable for the filtered list
+  filteredLocations$: Observable<HousingLocation[]> = this.housingLocations$;
 
-  constructor() {
-    // this.housingLocationList = this.housingService.getAllHousingLocations();
-    this.housingService.getAllHousingLocations().then((housingLocationList: HousingLocation[]) => {
-      this.housingLocationList = housingLocationList;
-      this.filteredLocationList = housingLocationList;
-    }); 
-  }
-
-  filterResults(text: string) {
-    if(!text) this.filteredLocationList = this.housingLocationList;
-
-    this.filteredLocationList = this.housingLocationList.filter(housingLocation =>
-      housingLocation?.city.toLowerCase().includes(text.toLowerCase())
+  applyFilter(text: string) {
+    this.filteredLocations$ = this.housingLocations$.pipe(
+      map((locations) =>
+        !text
+          ? locations
+          : locations.filter((location) =>
+              location.city.toLowerCase().includes(text.toLowerCase())
+            )
+      ),
+      startWith([]) // optional: ensures the stream starts with an empty array
     );
   }
 }
