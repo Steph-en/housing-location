@@ -1,7 +1,8 @@
-import { Injectable, ProviderToken } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { HousingLocation } from "./housing-location";
 import { firstValueFrom } from "rxjs";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
