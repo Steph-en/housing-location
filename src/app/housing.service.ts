@@ -1,6 +1,7 @@
 import { Injectable, ProviderToken } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { HousingLocation } from "./housing-location";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -117,13 +118,13 @@ export class HousingService {
 
   async getAllHousingLocations(): Promise<HousingLocation[]> {
     // return this.housingLocationList;
-    const result = await this.httpClient.get<HousingLocation[]>(this.url).toPromise();
+    const result = await firstValueFrom(this.httpClient.get<HousingLocation[]>(this.url));
     return result ?? [];
   }
 
   async getHousingLocationById(id: Number): Promise<HousingLocation | undefined> {
     // return this.housingLocationList.find(housingLocation => housingLocation.id === id)
-    return this.httpClient.get<HousingLocation>(`${this.url}/${id}`).toPromise();
+    return firstValueFrom(this.httpClient.get<HousingLocation>(`${this.url}/${id}`));
   }
 
   submitApplication(firstName: string, lastName: string, email: string) {
