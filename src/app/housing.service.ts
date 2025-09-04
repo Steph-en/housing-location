@@ -111,7 +111,7 @@ export class HousingService {
 
   // url = "http://localhost:3000/locations";
   
-  url = "https://my-json-server.typicode.com/Steph-en/housing-location.git";
+  url = "https://my-json-server.typicode.com/Steph-en/housing-location";
 
   constructor(private httpClient: HttpClient) {}
 
