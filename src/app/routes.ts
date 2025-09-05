@@ -5,12 +5,12 @@ import { DetailsComponent } from "./details/details.component";
 const routeConfig: Routes = [
     {
         path: '',
-        component: HomeComponent,
+        loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
         title: 'Home Page'
     },
     {
         path: 'details/:id',
-        component: DetailsComponent,
+        loadComponent: () => import('./details/details.component').then(m => m.DetailsComponent),
         title: 'Details Page'
     }
 ];
