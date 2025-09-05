@@ -39,13 +39,9 @@ export class HomeComponent {
 
   applyFilter(text: string) {
     this.filteredLocations$ = this.housingLocations$.pipe(
-      map((locations) =>
-        !text
-          ? locations
-          : locations.filter((location) =>
-              location.city.toLowerCase().includes(text.toLowerCase())
-            )
-      ),
+      map((locations) => !text ? locations : locations.filter((location) =>
+        location.city.toLowerCase().includes(text.toLowerCase())
+      )),
       startWith([]) // optional: ensures the stream starts with an empty array
     );
   }
