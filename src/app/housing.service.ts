@@ -12,7 +12,9 @@ export class HousingService {
   private resource = 'locations';
   private baseUrl = environment.apiBaseUrl || 'http://localhost:3000';
 
-  constructor(private httpClient: HttpClient) { }
+  httpClient = inject(HttpClient);
+
+  constructor() {}
 
   getAllHousingLocations(): Observable<HousingLocation[]> {
     return this.httpClient
