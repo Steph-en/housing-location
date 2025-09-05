@@ -5,7 +5,7 @@ import { DetailsComponent } from "./details/details.component";
 const routeConfig: Routes = [
     {
         path: '',
-        loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
+        component: HomeComponent,
         title: 'Home Page'
     },
     {
