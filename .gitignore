@@ -8,7 +8,7 @@ dist/
 out-tsc/
 
 # Ignore environment files (if you have secrets)
-src/environments/environment*.ts
+#src/environments/environment*.ts
 
 # Ignore IDE/editor settings
 .vscode/
