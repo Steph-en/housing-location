@@ -36,9 +36,6 @@ export class HousingService {
       );
   }
 
-  // submitApplication(firstName: string, lastName: string, email: string) {
-  //   console.log("Application submitted!", firstName, lastName, email);
-  // }
   submitApplication(firstName: string, lastName: string, email: string): Observable<any> {
     const application = { firstName, lastName, email };
     return this.httpClient
