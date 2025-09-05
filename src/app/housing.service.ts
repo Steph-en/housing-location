@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { HousingLocation } from "./housing-location";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { environment } from "src/environments/environment";
+import { environment } from "../environments/environment";
 
 @Injectable({
   providedIn: "root",
