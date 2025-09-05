@@ -10,7 +10,7 @@ import { environment } from "../environments/environment";
 })
 export class HousingService {
   private resource = 'locations';
-  private baseUrl = environment.apiBaseUrl || 'http://localhost:3000';
+  private baseUrl = environment.apiBaseUrl;
 
   httpClient = inject(HttpClient);
 
