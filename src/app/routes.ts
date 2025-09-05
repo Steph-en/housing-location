@@ -12,6 +12,10 @@ const routeConfig: Routes = [
         path: 'details/:id',
         loadComponent: () => import('./details/details.component').then(m => m.DetailsComponent),
         title: 'Details Page'
+    },
+    {
+        path: '**',
+        redirectTo: '',
     }
 ];
 
