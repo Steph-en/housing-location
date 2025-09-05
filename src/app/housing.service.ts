@@ -1,145 +1,52 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { HousingLocation } from "./housing-location";
-import { firstValueFrom } from "rxjs";
+import { Observable, of } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class HousingService {
-  // protected housingLocationList: HousingLocation[] = [
-  //   {
-  //     "id": 0,
-  //     "name": "Acme Fresh Start Housing",
-  //     "city": "Chicago",
-  //     "state": "IL",
-  //     "photo": "/assets/bernard-hermant-CLKGGwIBTaY-unsplash.jpg",
-  //     "availableUnits": 4,
-  //     "wifi": true,
-  //     "laundry": true,
-  //   },
-  //   {
-  //     "id": 1,
-  //     "name": "A113 Transitional Housing",
-  //     "city": "Santa Monica",
-  //     "state": "CA",
-  //     "photo": "/assets/brandon-griggs-wR11KBaB86U-unsplash.jpg",
-  //     "availableUnits": 0,
-  //     "wifi": false,
-  //     "laundry": true,
-  //   },
-  //   {
-  //     "id": 2,
-  //     "name": "Warm Beds Housing Support",
-  //     "city": "Juneau",
-  //     "state": "AK",
-  //     "photo": "/assets/i-do-nothing-but-love-lAyXdl1-Wmc-unsplash.jpg",
-  //     "availableUnits": 1,
-  //     "wifi": false,
-  //     "laundry": false,
-  //   },
-  //   {
-  //     "id": 3,
-  //     "name": "Homesteady Housing",
-  //     "city": "Chicago",
-  //     "state": "IL",
-  //     "photo": "/assets/ian-macdonald-W8z6aiwfi1E-unsplash.jpg",
-  //     "availableUnits": 1,
-  //     "wifi": true,
-  //     "laundry": false,
-  //   },
-  //   {
-  //     "id": 4,
-  //     "name": "Happy Homes Group",
-  //     "city": "Gary",
-  //     "state": "IN",
-  //     "photo": "/assets/krzysztof-hepner-978RAXoXnH4-unsplash.jpg",
-  //     "availableUnits": 1,
-  //     "wifi": true,
-  //     "laundry": false,
-  //   },
-  //   {
-  //     "id": 5,
-  //     "name": "Hopeful Apartment Group",
-  //     "city": "Oakland",
-  //     "state": "CA",
-  //     "photo": "/assets/r-architecture-JvQ0Q5IkeMM-unsplash.jpg",
-  //     "availableUnits": 2,
-  //     "wifi": true,
-  //     "laundry": true,
-  //   },
-  //   {
-  //     "id": 6,
-  //     "name": "Seriously Safe Towns",
-  //     "city": "Oakland",
-  //     "state": "CA",
-  //     "photo": "/assets/phil-hearing-IYfp2Ixe9nM-unsplash.jpg",
-  //     "availableUnits": 5,
-  //     "wifi": true,
-  //     "laundry": true,
-  //   },
-  //   {
-  //     "id": 7,
-  //     "name": "Hopeful Housing Solutions",
-  //     "city": "Oakland",
-  //     "state": "CA",
-  //     "photo": "/assets/r-architecture-GGupkreKwxA-unsplash.jpg",
-  //     "availableUnits": 2,
-  //     "wifi": true,
-  //     "laundry": true,
-  //   },
-  //   {
-  //     "id": 8,
-  //     "name": "Seriously Safe Towns",
-  //     "city": "Oakland",
-  //     "state": "CA",
-  //     "photo": "/assets/saru-robert-9rP3mxf8qWI-unsplash.jpg",
-  //     "availableUnits": 10,
-  //     "wifi": false,
-  //     "laundry": false,
-  //   },
-  //   {
-  //     "id": 9,
-  //     "name": "Capital Safe Towns",
-  //     "city": "Portland",
-  //     "state": "OR",
-  //     "photo": "/assets/webaliser-_TPTXZd9mOo-unsplash.jpg",
-  //     "availableUnits": 6,
-  //     "wifi": true,
-  //     "laundry": true,
-  //   },
-  // ];
-
-  // url = "http://localhost:3000/locations";
-
   private resource = 'locations';
-  private baseUrl = environment.apiBaseUrl;
+  private baseUrl = environment.apiBaseUrl || 'http://localhost:3000';
 
   constructor(private httpClient: HttpClient) { }
 
-  async getAllHousingLocations(): Promise<HousingLocation[]> {
-    // return this.housingLocationList;
-    try {
-      const result = await firstValueFrom(this.httpClient.get<HousingLocation[]>(`${this.baseUrl}/${this.resource}`));
-      return result ?? [];
-    } catch (error) {
-      console.error("Error fetching housing locations:", error);
-      return [];
-    }
+  getAllHousingLocations(): Observable<HousingLocation[]> {
+    return this.httpClient
+      .get<HousingLocation[]>(`${this.baseUrl}/${this.resource}`)
+      .pipe(
+        catchError((error) => {
+          console.error("Error fetching housing locations:", error);
+          return of([]); // fallback to empty array
+        })
+      );
   }
 
-  async getHousingLocationById(id: number): Promise<HousingLocation | undefined> {
-    // return this.housingLocationList.find(housingLocation => housingLocation.id === id)
-    try {
-      return await firstValueFrom(this.httpClient.get<HousingLocation>(`${this.baseUrl}/${this.resource}/${id}`));
-    } catch (error) {
-      console.error("Error fetching housing location by ID:", error);
-      return undefined;
-    }
+  getHousingLocationById(id: number): Observable<HousingLocation | undefined> {
+    return this.httpClient
+      .get<HousingLocation>(`${this.baseUrl}/${this.resource}/${id}`)
+      .pipe(
+        catchError((error) => {
+          console.error("Error fetching housing location by ID:", error);
+          return of(undefined); // fallback to undefined
+        })
+      );
   }
 
-  submitApplication(firstName: string, lastName: string, email: string) {
-    console.log("Application submitted!", firstName, lastName, email);
+  // submitApplication(firstName: string, lastName: string, email: string) {
+  //   console.log("Application submitted!", firstName, lastName, email);
+  // }
+  submitApplication(firstName: string, lastName: string, email: string): Observable<any> {
+    const application = { firstName, lastName, email };
+    return this.httpClient
+      .post(`${this.baseUrl}/applications`, application)
+      .pipe(catchError((error) => {
+        console.error("Error submitting application:", error);
+        return of({ success: false, error });
+      })
+    );
   }
 }
