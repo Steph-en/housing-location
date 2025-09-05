@@ -10,8 +10,8 @@ import { Observable, map, startWith } from "rxjs";
   standalone: true,
   template: `
     <section>
-      <form (submit)="$event.preventDefault()">
-        <input type="text" placeholder="Filter by City" #filter />
+      <form (ngSubmit)="$event.preventDefault()">
+        <input type="text" placeholder="Filter by City" #filter (input)="applyFilter(filter.value)" />
         <button class="primary" type="button" (click)="applyFilter(filter.value)">
           Search
         </button>
