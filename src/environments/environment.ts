@@ -1,5 +1,5 @@
 // environment.ts
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:3000'
+  apiBaseUrl: 'https://my-json-server.typicode.com/Steph-en/housing-location'
 };
