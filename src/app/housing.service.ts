@@ -14,7 +14,7 @@ export class HousingService {
 
   httpClient = inject(HttpClient);
 
-  constructor() {}
+  constructor() { }
 
   getAllHousingLocations(): Observable<HousingLocation[]> {
     return this.httpClient
@@ -40,12 +40,9 @@ export class HousingService {
 
   submitApplication(firstName: string, lastName: string, email: string): Observable<any> {
     const application = { firstName, lastName, email };
-    return this.httpClient
-      .post(`${this.baseUrl}/applications`, application)
-      .pipe(catchError((error) => {
-        console.error("Error submitting application:", error);
-        return of({ success: false, error });
-      })
-    );
+    return this.httpClient.post(`${this.baseUrl}/applications`, application).pipe(catchError((error) => {
+      console.error("Error submitting application:", error);
+      return of({ success: false, error });
+    }));
   }
 }
